@@ -14,15 +14,22 @@ async function login(evt) {
      const password = $("#login-password").val();
 
      // User.login retrieves user info from API and returns User instance
-     currentUser = await User.login(username, password);
+     try{
+          currentUser = await User.login(username, password);
 
-     $loginForm.trigger("reset");
+          $loginForm.trigger("reset");
 
-     hidePageComponents();
-     saveUserCredentialsInLocalStorage();
-     updateUIOnUserLogin();
-     putStoriesOnPage();
-     $(".nav-left").show();
+          hidePageComponents();
+          saveUserCredentialsInLocalStorage();
+          updateUIOnUserLogin();
+          putStoriesOnPage();
+          $(".nav-left").show();
+     }catch(err){
+          if(err.response.status == 401){
+               alert('Username and/or password is incorrect');
+          }
+          console.error(err);
+     }
 }
 
 $loginForm.on("submit", login);
